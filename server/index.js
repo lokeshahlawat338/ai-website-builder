@@ -8,7 +8,7 @@ const morgan = require('morgan');
 
 const userRoutes = require('./routes/user.routes');
 const generateRoutes = require('./routes/generate.routes');
-
+const projectRoutes = require('./routes/project.routes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/generate', generateRoutes);
-
+app.use('/api/v1/projects', projectRoutes);
 app.get('/health', async (req, res) => {
   res.json({
     status: 'ok',
