@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import Navbar from '../components/Navbar'
+import toast from 'react-hot-toast'
 import { Plus, Trash2, ExternalLink, Clock } from 'lucide-react'
 
 const DashboardPage = () => {
   const { projects, fetchUser, fetchProjects, removeProject, credits } = useApp()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   useEffect(() => {
     const init = async () => {
@@ -14,14 +16,20 @@ const DashboardPage = () => {
       await fetchProjects()
     }
     init()
+
+    if (searchParams.get('payment') === 'success') {
+      toast.success('Payment successful! Credits will be added shortly.')
+    }
+    if (searchParams.get('payment') === 'cancelled') {
+      toast.error('Payment cancelled.')
+    }
   }, [])
 
   return (
     <div className="min-h-screen bg-zinc-950">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-24 pb-12">
-        {/* Header */}
+      <div className="max-w-7xl mx-auto px-6 pt-28 pb-12">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white">My Projects</h1>
@@ -36,7 +44,6 @@ const DashboardPage = () => {
           </button>
         </div>
 
-        {/* Projects Grid */}
         {projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
             <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center mb-4">
@@ -58,17 +65,12 @@ const DashboardPage = () => {
                 key={project.id}
                 className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-purple-800 transition-all group"
               >
-                {/* Project title */}
                 <h3 className="text-white font-semibold text-base mb-2 line-clamp-1">
                   {project.title}
                 </h3>
-
-                {/* Prompt preview */}
                 <p className="text-zinc-400 text-sm mb-4 line-clamp-2 leading-relaxed">
                   {project.prompt}
                 </p>
-
-                {/* Date */}
                 <div className="flex items-center gap-1.5 text-zinc-500 text-xs mb-4">
                   <Clock size={12} />
                   {new Date(project.createdAt).toLocaleDateString('en-IN', {
@@ -77,8 +79,6 @@ const DashboardPage = () => {
                     year: 'numeric'
                   })}
                 </div>
-
-                {/* Actions */}
                 <div className="flex gap-2">
                   <button
                     onClick={() => navigate(`/project/${project.id}`)}
