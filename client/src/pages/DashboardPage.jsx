@@ -1,55 +1,110 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import Navbar from '../components/Navbar'
+import { Plus, Trash2, ExternalLink, Clock } from 'lucide-react'
 
 const DashboardPage = () => {
   const { projects, fetchUser, fetchProjects, removeProject, credits } = useApp()
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetchUser()
-    fetchProjects()
+    const init = async () => {
+      await fetchUser()
+      await fetchProjects()
+    }
+    init()
   }, [])
 
   return (
-    <div style={{color:'white',padding:'40px',background:'#09090b',minHeight:'100vh'}}>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'32px'}}>
-        <h1 style={{margin:0}}>My Projects</h1>
-        <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
-          <span style={{color:'#a855f7'}}>⚡ {credits} credits</span>
-          <button onClick={() => navigate('/builder')} style={{padding:'10px 20px',background:'#7c3aed',color:'white',border:'none',borderRadius:'8px',cursor:'pointer'}}>
-            + New Project
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-zinc-950">
+      <Navbar />
 
-      {projects.length === 0 ? (
-        <div style={{textAlign:'center',marginTop:'80px',color:'#71717a'}}>
-          <p style={{fontSize:'18px'}}>No projects yet</p>
-          <button onClick={() => navigate('/builder')} style={{padding:'12px 24px',background:'#7c3aed',color:'white',border:'none',borderRadius:'8px',cursor:'pointer',marginTop:'16px'}}>
-            Build your first website
+      <div className="max-w-7xl mx-auto px-6 pt-24 pb-12">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white">My Projects</h1>
+            <p className="text-zinc-400 mt-1">Manage and view your generated websites</p>
+          </div>
+          <button
+            onClick={() => navigate('/builder')}
+            className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors"
+          >
+            <Plus size={18} />
+            New Project
           </button>
         </div>
-      ) : (
-        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))',gap:'16px'}}>
-          {projects.map(project => (
-            <div key={project.id} style={{background:'#18181b',borderRadius:'12px',padding:'20px',border:'1px solid #27272a'}}>
-              <h3 style={{margin:'0 0 8px 0',fontSize:'16px'}}>{project.title}</h3>
-              <p style={{color:'#71717a',fontSize:'13px',margin:'0 0 16px 0'}}>{project.prompt?.slice(0, 80)}...</p>
-              <p style={{color:'#52525b',fontSize:'12px',margin:'0 0 16px 0'}}>{new Date(project.createdAt).toLocaleDateString()}</p>
-              <div style={{display:'flex',gap:'8px'}}>
-                <button onClick={() => navigate(`/project/${project.id}`)} style={{flex:1,padding:'8px',background:'#7c3aed',color:'white',border:'none',borderRadius:'6px',cursor:'pointer'}}>
-                  Open
-                </button>
-                <button onClick={() => removeProject(project.id)} style={{padding:'8px 12px',background:'#27272a',color:'#f87171',border:'none',borderRadius:'6px',cursor:'pointer'}}>
-                  Delete
-                </button>
-              </div>
+
+        {/* Projects Grid */}
+        {projects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-32 text-center">
+            <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center mb-4">
+              <Plus size={28} className="text-zinc-600" />
             </div>
-          ))}
-        </div>
-      )}
+            <h3 className="text-white font-semibold text-xl mb-2">No projects yet</h3>
+            <p className="text-zinc-400 mb-6">Build your first AI-generated website</p>
+            <button
+              onClick={() => navigate('/builder')}
+              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors"
+            >
+              Build your first website
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map(project => (
+              <div
+                key={project.id}
+                className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-purple-800 transition-all group"
+              >
+                {/* Project title */}
+                <h3 className="text-white font-semibold text-base mb-2 line-clamp-1">
+                  {project.title}
+                </h3>
+
+                {/* Prompt preview */}
+                <p className="text-zinc-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+                  {project.prompt}
+                </p>
+
+                {/* Date */}
+                <div className="flex items-center gap-1.5 text-zinc-500 text-xs mb-4">
+                  <Clock size={12} />
+                  {new Date(project.createdAt).toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                  })}
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => navigate(`/project/${project.id}`)}
+                    className="flex-1 flex items-center justify-center gap-2 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
+                  >
+                    <ExternalLink size={14} />
+                    Open
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Delete this project?')) {
+                        removeProject(project.id)
+                      }
+                    }}
+                    className="p-2 bg-zinc-800 hover:bg-red-950 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
+
 export default DashboardPage
