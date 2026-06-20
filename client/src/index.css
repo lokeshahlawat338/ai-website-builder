@@ -1,36 +1,81 @@
 @import "tailwindcss";
 
-* {
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-html, body, #root {
-  width: 100%;
-  height: 100%;
+:root {
+  --bg: #09090b;
+  --surface: #18181b;
+  --border: #27272a;
+  --primary: #7c3aed;
+  --primary-light: #a855f7;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+}
+
+html {
+  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
 body {
-  background-color: #09090b;
-  color: #fafafa;
-  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
+#root {
+  min-height: 100vh;
 }
 
-::-webkit-scrollbar-track {
-  background: #18181b;
+::selection {
+  background: rgba(124, 58, 237, 0.3);
+  color: #fff;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #3f3f46;
-  border-radius: 3px;
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
+
+img, video, svg { display: block; max-width: 100%; }
+button, input, textarea, select { font: inherit; }
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(124, 58, 237, 0.6);
+  outline-offset: 2px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #7c3aed;
+.glass {
+  background: rgba(24, 24, 27, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glow {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.15), 0 0 80px rgba(124, 58, 237, 0.05);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #c4b5fd 0%, #a855f7 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }

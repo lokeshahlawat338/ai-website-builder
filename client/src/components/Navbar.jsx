@@ -9,41 +9,86 @@ const Navbar = () => {
   const navigate = useNavigate()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        
+    <nav style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 50,
+      height: '64px',
+      background: 'rgba(9,9,11,0.85)',
+      backdropFilter: 'blur(20px)',
+      borderBottom: '1px solid rgba(255,255,255,0.06)',
+      display: 'flex',
+      alignItems: 'center',
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 text-white font-bold text-xl no-underline">
-          <Zap className="text-purple-500" size={24} fill="currentColor" />
-          <span>SiteBuilder <span className="text-purple-500">AI</span></span>
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            width: '34px', height: '34px',
+            background: 'rgba(124,58,237,0.15)',
+            border: '1px solid rgba(124,58,237,0.3)',
+            borderRadius: '10px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Zap size={18} fill="currentColor" style={{ color: '#a855f7' }} />
+          </div>
+          <span style={{ color: '#fff', fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' }}>
+            SiteBuilder <span style={{ color: '#a855f7' }}>AI</span>
+          </span>
         </Link>
 
-        {/* Nav links */}
-        <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-zinc-400 hover:text-white text-sm transition-colors no-underline">Home</Link>
+        {/* Links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+          <Link to="/" style={{ color: '#a1a1aa', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Home</Link>
           {isSignedIn && (
-            <Link to="/dashboard" className="text-zinc-400 hover:text-white text-sm transition-colors no-underline">Dashboard</Link>
+            <Link to="/dashboard" style={{ color: '#a1a1aa', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Dashboard</Link>
           )}
-          <Link to="/pricing" className="text-zinc-400 hover:text-white text-sm transition-colors no-underline">Pricing</Link>
+          <Link to="/pricing" style={{ color: '#a1a1aa', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Pricing</Link>
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4">
+        {/* Right */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {isSignedIn && (
-            <div 
+            <div
               onClick={() => navigate('/pricing')}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-950 border border-purple-800 rounded-full cursor-pointer hover:bg-purple-900 transition-colors"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '6px 14px',
+                background: 'rgba(124,58,237,0.12)',
+                border: '1px solid rgba(124,58,237,0.25)',
+                borderRadius: '999px',
+                cursor: 'pointer',
+              }}
             >
-              <Zap size={14} className="text-purple-400" />
-              <span className="text-purple-300 text-sm font-medium">{credits} credits</span>
+              <Zap size={13} fill="currentColor" style={{ color: '#a855f7' }} />
+              <span style={{ color: '#c4b5fd', fontSize: '13px', fontWeight: 600 }}>{credits} credits</span>
             </div>
           )}
           {isSignedIn ? (
             <UserButton afterSignOutUrl="/" />
           ) : (
-            <button 
+            <button
               onClick={() => navigate('/sign-in')}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
+              style={{
+                padding: '8px 18px',
+                background: '#7c3aed',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
             >
               Sign In
             </button>

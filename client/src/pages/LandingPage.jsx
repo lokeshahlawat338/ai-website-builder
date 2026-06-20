@@ -1,175 +1,350 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
 import Navbar from '../components/Navbar'
-import { Zap, Globe, Download, ArrowRight } from 'lucide-react'
+import { Zap, Download, ArrowRight, Sparkles, Code, Eye, Globe } from 'lucide-react'
 
 const LandingPage = () => {
   const navigate = useNavigate()
   const { isSignedIn } = useAuth()
 
   const handleStart = () => {
-    if (isSignedIn) {
-      navigate('/builder')
-    } else {
-      navigate('/sign-up')
-    }
+    navigate(isSignedIn ? '/builder' : '/sign-up')
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div style={{ minHeight: '100vh', background: '#09090b', overflowX: 'hidden' }}>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          
+      {/* Gradient blob */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        pointerEvents: 'none', overflow: 'hidden', zIndex: 0,
+      }}>
+        <div style={{
+          position: 'absolute', top: '-100px', left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px', height: '600px',
+          background: 'radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)',
+          borderRadius: '50%',
+        }} />
+      </div>
+
+      {/* HERO */}
+      <section style={{ position: 'relative', zIndex: 1, paddingTop: '140px', paddingBottom: '80px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
+
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-950 border border-purple-800 rounded-full text-purple-300 text-sm mb-8">
-            <Zap size={14} fill="currentColor" />
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '6px 16px', borderRadius: '999px',
+            background: 'rgba(124,58,237,0.1)',
+            border: '1px solid rgba(124,58,237,0.25)',
+            color: '#c4b5fd', fontSize: '13px', fontWeight: 500,
+            marginBottom: '32px',
+          }}>
+            <Zap size={13} fill="currentColor" />
             Powered by LLaMA AI — Free to get started
           </div>
 
           {/* Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Build any website in{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+          <h1 style={{
+            fontSize: 'clamp(36px, 6vw, 72px)',
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: '-1px',
+            color: '#fff',
+            marginBottom: '24px',
+          }}>
+            Build any website in
+            <br />
+            <span style={{
+              background: 'linear-gradient(135deg, #c084fc, #a855f7, #7c3aed)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>
               seconds with AI
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Describe your idea. Our AI generates a complete, beautiful website instantly. 
-            No coding required.
+          <p style={{
+            fontSize: '18px', color: '#a1a1aa', lineHeight: 1.7,
+            maxWidth: '520px', margin: '0 auto 40px',
+          }}>
+            Describe your idea. Our AI generates a complete, beautiful website instantly. No coding required.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '48px' }}>
             <button
               onClick={handleStart}
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl text-lg transition-all hover:scale-105"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '14px 28px', borderRadius: '12px',
+                background: '#7c3aed', color: '#fff',
+                border: 'none', fontSize: '15px', fontWeight: 600,
+                cursor: 'pointer',
+                boxShadow: '0 0 0 0 rgba(124,58,237,0)',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#6d28d9'}
+              onMouseLeave={e => e.currentTarget.style.background = '#7c3aed'}
             >
               Start Building Free
-              <ArrowRight size={20} />
+              <ArrowRight size={17} />
             </button>
             <button
               onClick={() => navigate('/pricing')}
-              className="px-8 py-4 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-semibold rounded-xl text-lg transition-colors"
+              style={{
+                padding: '14px 28px', borderRadius: '12px',
+                background: 'transparent', color: '#d4d4d8',
+                border: '1px solid #3f3f46', fontSize: '15px', fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#7c3aed'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#3f3f46'}
             >
               View Pricing
             </button>
           </div>
 
           {/* Social proof */}
-          <p className="text-zinc-500 text-sm mt-8">
+          <p style={{ color: '#52525b', fontSize: '13px' }}>
             Join 2,700+ developers already building with AI
           </p>
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-6 border-t border-zinc-800">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-4">
-            Everything you need to build fast
-          </h2>
-          <p className="text-zinc-400 text-center mb-12">Three steps from idea to website</p>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <Zap size={24} className="text-purple-400" />,
-                title: "Instant Generation",
-                description: "Type a prompt, get a full website in under 10 seconds. Powered by LLaMA 3.3 70B."
-              },
-              {
-                icon: <Globe size={24} className="text-purple-400" />,
-                title: "Beautiful Designs",
-                description: "AI generates modern, responsive sites with professional styling and animations."
-              },
-              {
-                icon: <Download size={24} className="text-purple-400" />,
-                title: "Export & Own",
-                description: "Download the HTML file or refine it with chat. You own your code completely."
-              }
-            ].map((feature, i) => (
-              <div key={i} className="p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-purple-800 transition-colors">
-                <div className="w-12 h-12 bg-purple-950 rounded-xl flex items-center justify-center mb-4">
-                  {feature.icon}
+          {/* Stats */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '16px', maxWidth: '500px', margin: '48px auto 0',
+          }}>
+            {[['10K+', 'Websites'], ['2K+', 'Users'], ['99.9%', 'Uptime']].map(([v, l]) => (
+              <div key={l} style={{
+                padding: '20px 16px', borderRadius: '16px',
+                background: 'rgba(24,24,27,0.8)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                textAlign: 'center',
+              }}>
+                <p style={{ fontSize: '24px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>{v}</p>
+                <p style={{ fontSize: '12px', color: '#71717a' }}>{l}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Browser Mockup */}
+          <div style={{
+            marginTop: '64px',
+            borderRadius: '20px',
+            background: 'rgba(24,24,27,0.6)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            padding: '16px',
+            backdropFilter: 'blur(20px)',
+          }}>
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', paddingLeft: '4px' }}>
+              {['#ef4444','#f59e0b','#22c55e'].map(c => (
+                <div key={c} style={{ width: '12px', height: '12px', borderRadius: '50%', background: c + 'cc' }} />
+              ))}
+            </div>
+            <div style={{
+              borderRadius: '12px', background: '#0d0d10',
+              border: '1px solid rgba(255,255,255,0.05)', padding: '20px',
+            }}>
+              <div style={{
+                height: '44px', borderRadius: '8px',
+                background: 'rgba(124,58,237,0.12)',
+                marginBottom: '16px', display: 'flex', alignItems: 'center', padding: '0 16px', gap: '10px',
+              }}>
+                <div style={{ width: '16px', height: '16px', borderRadius: '4px', background: 'rgba(124,58,237,0.4)' }} />
+                <div style={{ height: '8px', width: '120px', background: '#3f3f46', borderRadius: '4px' }} />
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
+                  {[80,80,80].map((w,i) => (
+                    <div key={i} style={{ height: '8px', width: `${w}px`, background: '#3f3f46', borderRadius: '4px' }} />
+                  ))}
                 </div>
-                <h3 className="text-white font-semibold text-lg mb-2">{feature.title}</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">{feature.description}</p>
               </div>
-            ))}
+              <div style={{
+                height: '80px', borderRadius: '8px',
+                background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(168,85,247,0.08))',
+                marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{ height: '10px', width: '160px', background: '#52525b', borderRadius: '5px' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
+                {[1,2,3].map(i => (
+                  <div key={i} style={{
+                    height: '80px', borderRadius: '8px',
+                    background: 'rgba(39,39,42,0.6)',
+                    border: '1px solid rgba(255,255,255,0.04)',
+                  }} />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 px-6 border-t border-zinc-800">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">How it works</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* FEATURES */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>
+              Everything you need to build fast
+            </h2>
+            <p style={{ color: '#71717a', fontSize: '16px' }}>Three steps from idea to live website</p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
             {[
-              { step: "01", title: "Describe", desc: "Tell the AI what kind of website you need in plain English" },
-              { step: "02", title: "Generate", desc: "AI builds the complete HTML, CSS, and JavaScript in seconds" },
-              { step: "03", title: "Download", desc: "Preview it live, refine with chat, then download or copy the code" }
-            ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="text-5xl font-bold text-purple-900 mb-4">{item.step}</div>
-                <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
-                <p className="text-zinc-400 text-sm">{item.desc}</p>
+              { icon: <Sparkles size={20} style={{ color: '#a855f7' }} />, title: 'Instant Generation', desc: 'Type a prompt, get a full website in under 10 seconds powered by LLaMA 3.3 70B.' },
+              { icon: <Code size={20} style={{ color: '#a855f7' }} />, title: 'Chat Refinement', desc: 'Refine your website with natural language. Change colors, add sections, update content.' },
+              { icon: <Download size={20} style={{ color: '#a855f7' }} />, title: 'Export & Own', desc: 'Download the complete HTML. You own the code — no lock-in, no subscriptions.' },
+            ].map((f, i) => (
+              <div key={i} style={{
+                padding: '28px',
+                background: 'rgba(24,24,27,0.7)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '20px',
+                backdropFilter: 'blur(16px)',
+              }}>
+                <div style={{
+                  width: '44px', height: '44px',
+                  background: 'rgba(124,58,237,0.12)',
+                  border: '1px solid rgba(124,58,237,0.2)',
+                  borderRadius: '12px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: '20px',
+                }}>
+                  {f.icon}
+                </div>
+                <h3 style={{ color: '#fff', fontWeight: 600, fontSize: '17px', marginBottom: '8px' }}>{f.title}</h3>
+                <p style={{ color: '#71717a', fontSize: '14px', lineHeight: 1.7 }}>{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Example websites */}
-      <section className="py-20 px-6 border-t border-zinc-800">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-4">What can you build?</h2>
-          <p className="text-zinc-400 text-center mb-12">Any website, any style, in seconds</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {['Portfolio', 'Restaurant', 'SaaS Landing', 'Blog', 'Agency', 'E-Commerce'].map((type, i) => (
+      {/* HOW IT WORKS */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>How it works</h2>
+          <p style={{ color: '#71717a', fontSize: '16px', marginBottom: '56px' }}>From idea to website in 3 simple steps</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '40px' }}>
+            {[
+              { step: '01', icon: <Code size={18} style={{ color: '#a855f7' }} />, title: 'Describe', desc: 'Tell the AI what kind of website you need in plain English' },
+              { step: '02', icon: <Sparkles size={18} style={{ color: '#a855f7' }} />, title: 'Generate', desc: 'AI builds complete HTML, CSS, and JavaScript in seconds' },
+              { step: '03', icon: <Eye size={18} style={{ color: '#a855f7' }} />, title: 'Download', desc: 'Preview live, refine with chat, then download your code' },
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{
+                  width: '48px', height: '48px',
+                  background: 'rgba(124,58,237,0.1)',
+                  border: '1px solid rgba(124,58,237,0.2)',
+                  borderRadius: '14px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: '12px',
+                }}>
+                  {item.icon}
+                </div>
+                <p style={{ fontSize: '56px', fontWeight: 900, color: 'rgba(63,63,70,0.5)', lineHeight: 1, marginBottom: '8px' }}>{item.step}</p>
+                <h3 style={{ color: '#fff', fontWeight: 600, fontSize: '17px', marginBottom: '8px' }}>{item.title}</h3>
+                <p style={{ color: '#71717a', fontSize: '14px', lineHeight: 1.6 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* EXAMPLES */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>What can you build?</h2>
+            <p style={{ color: '#71717a', fontSize: '16px' }}>Any website, any style, in seconds</p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
+            {[
+              { type: 'Portfolio', desc: 'Showcase your work' },
+              { type: 'Restaurant', desc: 'Menu & reservations' },
+              { type: 'SaaS Landing', desc: 'Convert visitors' },
+              { type: 'Blog', desc: 'Share your thoughts' },
+              { type: 'Agency', desc: 'Win more clients' },
+              { type: 'E-Commerce', desc: 'Sell your products' },
+            ].map((item, i) => (
               <div
                 key={i}
-                onClick={() => { navigate(isSignedIn ? '/builder' : '/sign-up') }}
-                className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-purple-600 hover:bg-zinc-800 cursor-pointer transition-all group"
+                onClick={() => navigate(isSignedIn ? '/builder' : '/sign-up')}
+                style={{
+                  padding: '24px',
+                  background: 'rgba(24,24,27,0.7)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'rgba(124,58,237,0.4)'
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
               >
-                <p className="text-white font-medium group-hover:text-purple-400 transition-colors">{type}</p>
-                <p className="text-zinc-500 text-sm mt-1">Click to build →</p>
+                <p style={{ color: '#fff', fontWeight: 600, marginBottom: '4px' }}>{item.type}</p>
+                <p style={{ color: '#52525b', fontSize: '13px' }}>{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 border-t border-zinc-800">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to build?</h2>
-          <p className="text-zinc-400 mb-8">Start free with 5 credits. No credit card required.</p>
-          <button
-            onClick={handleStart}
-            className="flex items-center justify-center gap-2 px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl text-lg transition-all hover:scale-105 mx-auto"
-          >
-            Start Building Free <ArrowRight size={20} />
-          </button>
+      {/* CTA */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{
+            padding: '64px 40px',
+            borderRadius: '24px',
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(168,85,247,0.05))',
+            border: '1px solid rgba(124,58,237,0.2)',
+          }}>
+            <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#fff', marginBottom: '16px' }}>Ready to build?</h2>
+            <p style={{ color: '#71717a', fontSize: '16px', marginBottom: '32px' }}>Start free with 5 credits. No credit card required.</p>
+            <button
+              onClick={handleStart}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                padding: '14px 32px', borderRadius: '12px',
+                background: '#7c3aed', color: '#fff',
+                border: 'none', fontSize: '15px', fontWeight: 600, cursor: 'pointer',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#6d28d9'}
+              onMouseLeave={e => e.currentTarget.style.background = '#7c3aed'}
+            >
+              Start Building Free <ArrowRight size={16} />
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800 py-8 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-white font-bold">
-            <Zap size={20} className="text-purple-500" fill="currentColor" />
+      {/* FOOTER */}
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 24px', position: 'relative', zIndex: 1 }}>
+        <div style={{
+          maxWidth: '1100px', margin: '0 auto',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff', fontWeight: 700 }}>
+            <Zap size={18} fill="currentColor" style={{ color: '#a855f7' }} />
             SiteBuilder AI
           </div>
-          <p className="text-zinc-500 text-sm">© 2026 SiteBuilder AI. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="text-zinc-500 hover:text-white text-sm transition-colors no-underline">Privacy</a>
-            <a href="#" className="text-zinc-500 hover:text-white text-sm transition-colors no-underline">Terms</a>
+          <p style={{ color: '#52525b', fontSize: '13px' }}>© 2026 SiteBuilder AI. All rights reserved.</p>
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <a href="#" style={{ color: '#52525b', fontSize: '13px', textDecoration: 'none' }}>Privacy</a>
+            <a href="#" style={{ color: '#52525b', fontSize: '13px', textDecoration: 'none' }}>Terms</a>
           </div>
         </div>
       </footer>

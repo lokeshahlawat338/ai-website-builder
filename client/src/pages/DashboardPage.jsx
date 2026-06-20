@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import Navbar from '../components/Navbar'
 import toast from 'react-hot-toast'
-import { Plus, Trash2, ExternalLink, Clock } from 'lucide-react'
+import { Plus, Trash2, ExternalLink, Clock, Zap } from 'lucide-react'
 
 const DashboardPage = () => {
   const { projects, fetchUser, fetchProjects, removeProject, credits } = useApp()
@@ -16,7 +16,6 @@ const DashboardPage = () => {
       await fetchProjects()
     }
     init()
-
     if (searchParams.get('payment') === 'success') {
       toast.success('Payment successful! Credits will be added shortly.')
     }
@@ -26,77 +25,188 @@ const DashboardPage = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div style={{ minHeight: '100vh', background: '#09090b' }}>
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-28 pb-12">
-        <div className="flex items-center justify-between mb-8">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 24px 60px' }}>
+
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h1 className="text-3xl font-bold text-white">My Projects</h1>
-            <p className="text-zinc-400 mt-1">Manage and view your generated websites</p>
+            <h1 style={{ fontSize: '36px', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px', marginBottom: '8px' }}>
+              My Projects
+            </h1>
+            <p style={{ color: '#71717a', fontSize: '15px' }}>
+              Manage, preview and refine your AI-generated websites
+            </p>
           </div>
           <button
             onClick={() => navigate('/builder')}
-            className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              padding: '12px 24px', borderRadius: '12px',
+              background: '#7c3aed', color: '#fff',
+              border: 'none', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#6d28d9'}
+            onMouseLeave={e => e.currentTarget.style.background = '#7c3aed'}
           >
-            <Plus size={18} />
+            <Plus size={17} />
             New Project
           </button>
         </div>
 
-        {projects.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center mb-4">
-              <Plus size={28} className="text-zinc-600" />
+        {/* Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '40px' }}>
+          {[
+            { label: 'Total Projects', value: projects.length, color: '#fff' },
+            { label: 'Credits Available', value: credits, color: '#a855f7' },
+            { label: 'Status', value: projects.length > 0 ? 'Active' : 'No Projects', color: '#22c55e' },
+          ].map((stat, i) => (
+            <div key={i} style={{
+              padding: '24px',
+              background: 'rgba(24,24,27,0.7)',
+              border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: '16px',
+              backdropFilter: 'blur(16px)',
+            }}>
+              <p style={{ color: '#71717a', fontSize: '13px', marginBottom: '8px' }}>{stat.label}</p>
+              <p style={{ fontSize: '28px', fontWeight: 700, color: stat.color }}>{stat.value}</p>
             </div>
-            <h3 className="text-white font-semibold text-xl mb-2">No projects yet</h3>
-            <p className="text-zinc-400 mb-6">Build your first AI-generated website</p>
+          ))}
+        </div>
+
+        {/* Projects */}
+        {projects.length === 0 ? (
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'center', padding: '80px 24px', textAlign: 'center',
+          }}>
+            <div style={{
+              width: '72px', height: '72px',
+              background: 'rgba(124,58,237,0.1)',
+              border: '1px solid rgba(124,58,237,0.2)',
+              borderRadius: '20px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              marginBottom: '24px',
+            }}>
+              <Plus size={32} style={{ color: '#a855f7' }} />
+            </div>
+            <h3 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>No projects yet</h3>
+            <p style={{ color: '#71717a', marginBottom: '32px', maxWidth: '360px', lineHeight: 1.6 }}>
+              Create your first AI-generated website and start building beautiful experiences in seconds.
+            </p>
             <button
               onClick={() => navigate('/builder')}
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors"
+              style={{
+                padding: '12px 28px', borderRadius: '12px',
+                background: '#7c3aed', color: '#fff',
+                border: 'none', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+              }}
             >
-              Build your first website
+              Build Your First Website
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
             {projects.map(project => (
               <div
                 key={project.id}
-                className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-purple-800 transition-all group"
+                style={{
+                  background: 'rgba(24,24,27,0.7)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: '20px',
+                  overflow: 'hidden',
+                  backdropFilter: 'blur(16px)',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'rgba(124,58,237,0.35)'
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
               >
-                <h3 className="text-white font-semibold text-base mb-2 line-clamp-1">
-                  {project.title}
-                </h3>
-                <p className="text-zinc-400 text-sm mb-4 line-clamp-2 leading-relaxed">
-                  {project.prompt}
-                </p>
-                <div className="flex items-center gap-1.5 text-zinc-500 text-xs mb-4">
-                  <Clock size={12} />
-                  {new Date(project.createdAt).toLocaleDateString('en-IN', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                  })}
+                {/* Preview area */}
+                <div style={{
+                  height: '140px',
+                  background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(168,85,247,0.05), rgba(24,24,27,1))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                }}>
+                  <div style={{
+                    width: '56px', height: '56px',
+                    background: 'rgba(124,58,237,0.12)',
+                    border: '1px solid rgba(124,58,237,0.2)',
+                    borderRadius: '16px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <ExternalLink size={24} style={{ color: '#a855f7' }} />
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => navigate(`/project/${project.id}`)}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
-                  >
-                    <ExternalLink size={14} />
-                    Open
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Delete this project?')) {
-                        removeProject(project.id)
-                      }
-                    }}
-                    className="p-2 bg-zinc-800 hover:bg-red-950 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+
+                {/* Content */}
+                <div style={{ padding: '20px' }}>
+                  <h3 style={{
+                    color: '#fff', fontWeight: 600, fontSize: '15px',
+                    marginBottom: '8px',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {project.title}
+                  </h3>
+                  <p style={{
+                    color: '#71717a', fontSize: '13px', lineHeight: 1.6,
+                    marginBottom: '12px',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                  }}>
+                    {project.prompt}
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#52525b', fontSize: '12px', marginBottom: '16px' }}>
+                    <Clock size={12} />
+                    {new Date(project.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </div>
+
+                  {/* Actions */}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={() => navigate(`/project/${project.id}`)}
+                      style={{
+                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        padding: '10px', borderRadius: '10px',
+                        background: '#7c3aed', color: '#fff',
+                        border: 'none', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#6d28d9'}
+                      onMouseLeave={e => e.currentTarget.style.background = '#7c3aed'}
+                    >
+                      <ExternalLink size={13} /> Open
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm('Delete this project?')) removeProject(project.id)
+                      }}
+                      style={{
+                        padding: '10px 12px', borderRadius: '10px',
+                        background: 'rgba(39,39,42,0.8)', color: '#71717a',
+                        border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = 'rgba(127,29,29,0.3)'
+                        e.currentTarget.style.color = '#f87171'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = 'rgba(39,39,42,0.8)'
+                        e.currentTarget.style.color = '#71717a'
+                      }}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

@@ -27,7 +27,6 @@ const ProjectPage = () => {
         await getAuthToken()
         const res = await getProject(id)
         setProject(res.data.project)
-        // Load existing prompt history as chat
         if (res.data.project.promptHistory?.length > 1) {
           setChatHistory(res.data.project.promptHistory.slice(1))
         }
@@ -52,8 +51,6 @@ const ProjectPage = () => {
     const currentInstruction = instruction
     setInstruction('')
     setIsRefining(true)
-
-    // Optimistically add to chat
     setChatHistory(prev => [...prev, currentInstruction])
 
     try {
@@ -63,7 +60,6 @@ const ProjectPage = () => {
       updateCredits(res.data.remainingCredits)
       toast.success('Website refined successfully!')
     } catch (err) {
-      // Remove optimistic message on failure
       setChatHistory(prev => prev.slice(0, -1))
       setInstruction(currentInstruction)
       toast.error(err.response?.data?.error || 'Refinement failed')
@@ -116,7 +112,7 @@ const ProjectPage = () => {
     return (
       <div className="h-screen bg-zinc-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-2 border-purple-600/30 border-t-purple-600 rounded-full animate-spin" />
+          <div className="w-10 h-10 border-2 border-purple-600/30 border-t-purple-600 rounded-full animate-spin"></div>
           <p className="text-zinc-400 text-sm">Loading project...</p>
         </div>
       </div>
@@ -125,8 +121,9 @@ const ProjectPage = () => {
 
   return (
     <div className="h-screen bg-zinc-950 flex flex-col overflow-hidden">
+
       {/* Top Bar */}
-      <div className="h-14 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4 flex-shrink-0">
+      <div className="h-16 bg-zinc-900/80 backdrop-blur-xl border-b border-zinc-800 flex items-center justify-between px-6 flex-shrink-0">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/dashboard')}
@@ -135,7 +132,7 @@ const ProjectPage = () => {
             <ArrowLeft size={16} />
             Back
           </button>
-          <div className="w-px h-4 bg-zinc-700" />
+          <div className="w-px h-4 bg-zinc-700"></div>
           <h1 className="text-white font-medium text-sm truncate max-w-xs">
             {project?.title}
           </h1>
@@ -172,8 +169,10 @@ const ProjectPage = () => {
 
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
+
         {/* Left: Chat Panel */}
-        <div className="w-80 bg-zinc-900 border-r border-zinc-800 flex flex-col flex-shrink-0">
+        <div className="w-[420px] bg-zinc-900/60 backdrop-blur-xl border-r border-zinc-800 flex flex-col flex-shrink-0">
+
           {/* Original Prompt */}
           <div className="p-4 border-b border-zinc-800">
             <p className="text-zinc-500 text-xs font-medium uppercase tracking-wider mb-2">
@@ -215,20 +214,18 @@ const ProjectPage = () => {
                 </div>
               </div>
             ) : (
-              <>
+              <div className="flex flex-col gap-3">
                 {chatHistory.map((msg, i) => (
                   <div key={i} className="flex flex-col gap-1">
-                    {/* User message */}
                     <div className="flex justify-end">
-                      <div className="bg-purple-600 text-white text-sm px-3 py-2 rounded-2xl rounded-tr-sm max-w-[85%] leading-relaxed">
+                      <div className="bg-purple-600 text-white text-sm px-3 py-2 rounded-2xl rounded-tr-sm max-w-xs leading-relaxed">
                         {msg}
                       </div>
                     </div>
-                    {/* AI response */}
                     <div className="flex justify-start">
-                      <div className="bg-zinc-800 text-zinc-300 text-xs px-3 py-2 rounded-2xl rounded-tl-sm max-w-[85%] leading-relaxed flex items-center gap-1.5">
+                      <div className="bg-zinc-800 text-zinc-300 text-xs px-3 py-2 rounded-2xl rounded-tl-sm flex items-center gap-1.5">
                         <Zap size={10} className="text-purple-400 flex-shrink-0" fill="currentColor" />
-                        Website updated ✓
+                        Website updated
                       </div>
                     </div>
                   </div>
@@ -236,17 +233,17 @@ const ProjectPage = () => {
                 {isRefining && (
                   <div className="flex justify-start">
                     <div className="bg-zinc-800 text-zinc-400 text-xs px-3 py-2 rounded-2xl rounded-tl-sm flex items-center gap-2">
-                      <div className="w-3 h-3 border border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                      <div className="w-3 h-3 border border-purple-500/30 border-t-purple-500 rounded-full animate-spin"></div>
                       Refining website...
                     </div>
                   </div>
                 )}
-              </>
+              </div>
             )}
           </div>
 
           {/* Input Area */}
-          <div className="p-4 border-t border-zinc-800">
+          <div className="p-4 border-t border-zinc-800 bg-zinc-900/70 backdrop-blur-xl">
             <div className="flex flex-col gap-2">
               <textarea
                 value={instruction}
@@ -259,7 +256,7 @@ const ProjectPage = () => {
               />
               <div className="flex items-center justify-between">
                 <span className="text-zinc-600 text-xs">
-                  Press Enter to send • Shift+Enter for new line
+                  Enter to send
                 </span>
                 <button
                   onClick={handleRefine}
@@ -267,7 +264,7 @@ const ProjectPage = () => {
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 disabled:bg-zinc-700 disabled:cursor-not-allowed text-white text-xs font-medium rounded-lg transition-colors"
                 >
                   {isRefining ? (
-                    <div className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin"></div>
                   ) : (
                     <Send size={12} />
                   )}
@@ -280,6 +277,7 @@ const ProjectPage = () => {
 
         {/* Right: Preview */}
         <div className="flex-1 flex flex-col overflow-hidden">
+
           {/* Preview toolbar */}
           <div className="h-10 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4 flex-shrink-0">
             <div className="flex items-center gap-1">
@@ -298,7 +296,7 @@ const ProjectPage = () => {
                   }`}
                 >
                   {d.icon}
-                  <span className="hidden sm:inline">{d.label}</span>
+                  <span>{d.label}</span>
                 </button>
               ))}
             </div>
@@ -308,11 +306,11 @@ const ProjectPage = () => {
           </div>
 
           {/* Preview Area */}
-          <div className="flex-1 bg-zinc-950 overflow-hidden flex items-start justify-center p-3">
+          <div className="flex-1 bg-[#09090b] overflow-hidden flex items-start justify-center p-6">
             {isRefining ? (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                  <div className="w-10 h-10 border-2 border-purple-600/30 border-t-purple-600 rounded-full animate-spin" />
+                  <div className="w-10 h-10 border-2 border-purple-600/30 border-t-purple-600 rounded-full animate-spin"></div>
                   <p className="text-zinc-400 text-sm">AI is refining your website...</p>
                 </div>
               </div>

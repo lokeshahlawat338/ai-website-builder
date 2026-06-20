@@ -43,100 +43,142 @@ const BuilderPage = () => {
     URL.revokeObjectURL(url)
   }
 
-  const deviceWidths = {
-    desktop: '100%',
-    tablet: '768px',
-    mobile: '375px'
-  }
+  const deviceWidths = { desktop: '100%', tablet: '768px', mobile: '375px' }
 
   return (
-    <div className="h-screen bg-zinc-950 flex flex-col overflow-hidden">
+    <div style={{ height: '100vh', background: '#09090b', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <Navbar />
 
-      <div className="flex flex-1 overflow-hidden pt-16">
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden', marginTop: '64px' }}>
+
         {/* Left Panel */}
-        <div className="w-96 bg-zinc-900 border-r border-zinc-800 flex flex-col overflow-hidden">
-          {/* Panel Header */}
-          <div className="p-6 border-b border-zinc-800">
-            <h2 className="text-white font-bold text-lg flex items-center gap-2">
-              <Zap size={20} className="text-purple-400" fill="currentColor" />
-              AI Website Builder
-            </h2>
-            <p className="text-zinc-400 text-sm mt-1">Describe your website and let AI do the work</p>
+        <div style={{
+          width: '380px', minWidth: '380px',
+          background: 'rgba(18,18,20,0.95)',
+          borderRight: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', flexDirection: 'column', overflow: 'hidden',
+        }}>
+
+          {/* Header */}
+          <div style={{ padding: '24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+              <Zap size={20} fill="currentColor" style={{ color: '#a855f7' }} />
+              <h2 style={{ color: '#fff', fontWeight: 700, fontSize: '16px' }}>AI Website Builder</h2>
+            </div>
+            <p style={{ color: '#52525b', fontSize: '13px' }}>Describe your website and let AI do the work</p>
           </div>
 
-          {/* Credits */}
-          <div className="px-6 py-3 bg-purple-950/40 border-b border-purple-900/30 flex items-center justify-between">
-            <span className="text-zinc-400 text-sm">Credits remaining</span>
-            <span className={`font-bold text-sm ${credits <= 3 ? 'text-red-400' : 'text-purple-400'}`}>
-              ⚡ {credits}
-            </span>
+          {/* Credits bar */}
+          <div style={{
+            padding: '10px 24px',
+            background: 'rgba(124,58,237,0.08)',
+            borderBottom: '1px solid rgba(124,58,237,0.15)',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          }}>
+            <span style={{ color: '#71717a', fontSize: '13px' }}>Credits remaining</span>
+            <span style={{ color: credits <= 3 ? '#f87171' : '#a855f7', fontWeight: 700, fontSize: '13px' }}>⚡ {credits}</span>
           </div>
 
-          {/* Prompt Input */}
-          <div className="p-6 flex-1 overflow-y-auto flex flex-col gap-4">
+          {/* Scrollable */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
             <div>
-              <label className="text-zinc-300 text-sm font-medium mb-2 block">
+              <label style={{ color: '#d4d4d8', fontSize: '13px', fontWeight: 500, display: 'block', marginBottom: '8px' }}>
                 Describe your website
               </label>
               <textarea
                 value={prompt}
                 onChange={e => setPrompt(e.target.value)}
-                placeholder="e.g. A photography portfolio for a wedding photographer with a dark elegant theme, gallery section, about me, and contact form..."
-                className="w-full h-36 px-4 py-3 bg-zinc-800 border border-zinc-700 hover:border-zinc-600 focus:border-purple-500 focus:outline-none rounded-xl text-white text-sm placeholder-zinc-500 resize-none transition-colors"
+                placeholder="e.g. A photography portfolio with dark elegant theme, gallery, about me, and contact form..."
+                style={{
+                  width: '100%', minHeight: '130px', padding: '12px 14px',
+                  background: 'rgba(39,39,42,0.6)',
+                  border: '1px solid rgba(63,63,70,0.8)',
+                  borderRadius: '12px', color: '#fff', fontSize: '13px',
+                  resize: 'vertical', outline: 'none', lineHeight: 1.6,
+                  fontFamily: 'inherit',
+                }}
+                onFocus={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.6)'}
+                onBlur={e => e.currentTarget.style.borderColor = 'rgba(63,63,70,0.8)'}
               />
-              <div className="flex justify-between mt-1">
-                <span className="text-zinc-600 text-xs">{prompt.length} characters</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
+                <span style={{ color: '#52525b', fontSize: '11px' }}>{prompt.length} chars</span>
                 {prompt.length < 10 && prompt.length > 0 && (
-                  <span className="text-red-400 text-xs">Too short</span>
+                  <span style={{ color: '#f87171', fontSize: '11px' }}>Too short</span>
                 )}
               </div>
             </div>
 
             {error && (
-              <div className="p-3 bg-red-950/50 border border-red-800 rounded-lg">
-                <p className="text-red-400 text-sm">{error}</p>
+              <div style={{
+                padding: '12px', borderRadius: '10px',
+                background: 'rgba(127,29,29,0.3)',
+                border: '1px solid rgba(239,68,68,0.3)',
+              }}>
+                <p style={{ color: '#f87171', fontSize: '13px' }}>{error}</p>
               </div>
             )}
 
             <button
               onClick={handleGenerate}
               disabled={isLoading || credits === 0 || prompt.trim().length < 10}
-              className="w-full py-3.5 bg-purple-600 hover:bg-purple-700 disabled:bg-zinc-700 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+              style={{
+                width: '100%', padding: '13px',
+                background: isLoading || credits === 0 || prompt.trim().length < 10 ? '#27272a' : '#7c3aed',
+                color: '#fff', border: 'none', borderRadius: '12px',
+                fontSize: '14px', fontWeight: 600, cursor: isLoading ? 'not-allowed' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              }}
             >
               {isLoading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Generating your website...
+                  <div style={{
+                    width: '16px', height: '16px',
+                    border: '2px solid rgba(255,255,255,0.2)',
+                    borderTopColor: '#fff',
+                    borderRadius: '50%',
+                    animation: 'spin 0.8s linear infinite',
+                  }} />
+                  Generating...
                 </>
               ) : (
-                <>
-                  <Sparkles size={16} />
-                  Generate Website ✨
-                </>
+                <><Sparkles size={15} /> Generate Website ✨</>
               )}
             </button>
 
             {credits === 0 && (
               <button
                 onClick={() => navigate('/pricing')}
-                className="w-full py-3 border border-purple-700 text-purple-400 hover:bg-purple-950 rounded-xl text-sm font-medium transition-colors"
+                style={{
+                  width: '100%', padding: '12px',
+                  background: 'transparent', color: '#a855f7',
+                  border: '1px solid rgba(124,58,237,0.4)',
+                  borderRadius: '12px', fontSize: '13px', fontWeight: 500, cursor: 'pointer',
+                }}
               >
                 Buy more credits →
               </button>
             )}
 
-            {/* Example Prompts */}
+            {/* Examples */}
             <div>
-              <p className="text-zinc-500 text-xs font-medium uppercase tracking-wider mb-3">
+              <p style={{ color: '#52525b', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
                 Try these examples
               </p>
-              <div className="flex flex-col gap-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {EXAMPLE_PROMPTS.map((ex, i) => (
                   <button
                     key={i}
                     onClick={() => setPrompt(ex)}
-                    className="text-left px-3 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-zinc-600 rounded-lg text-zinc-300 text-xs transition-colors leading-relaxed"
+                    style={{
+                      textAlign: 'left', padding: '10px 12px',
+                      background: 'rgba(39,39,42,0.5)',
+                      border: '1px solid rgba(63,63,70,0.6)',
+                      borderRadius: '10px', color: '#a1a1aa', fontSize: '12px',
+                      cursor: 'pointer', lineHeight: 1.5,
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.4)'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(63,63,70,0.6)'}
                   >
                     {ex}
                   </button>
@@ -146,30 +188,41 @@ const BuilderPage = () => {
           </div>
         </div>
 
-        {/* Right Panel - Preview */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Preview Toolbar */}
-          <div className="h-12 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4">
-            <div className="flex items-center gap-1">
+        {/* Right Panel */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+
+          {/* Toolbar */}
+          <div style={{
+            height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '0 16px',
+            background: 'rgba(18,18,20,0.95)',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {[
-                { id: 'desktop', icon: <Monitor size={15} /> },
-                { id: 'tablet', icon: <Tablet size={15} /> },
-                { id: 'mobile', icon: <Smartphone size={15} /> }
+                { id: 'desktop', icon: <Monitor size={14} /> },
+                { id: 'tablet', icon: <Tablet size={14} /> },
+                { id: 'mobile', icon: <Smartphone size={14} /> },
               ].map(d => (
                 <button
                   key={d.id}
                   onClick={() => setDevice(d.id)}
-                  className={`p-2 rounded-lg transition-colors ${device === d.id ? 'bg-purple-600 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'}`}
+                  style={{
+                    padding: '6px 10px', borderRadius: '8px',
+                    background: device === d.id ? '#7c3aed' : 'transparent',
+                    color: device === d.id ? '#fff' : '#71717a',
+                    border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  }}
                 >
                   {d.icon}
                 </button>
               ))}
-              <span className="text-zinc-500 text-xs ml-2">
+              <span style={{ color: '#52525b', fontSize: '11px', marginLeft: '8px' }}>
                 {device === 'desktop' ? 'Full width' : device === 'tablet' ? '768px' : '375px'}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               {generatedHTML && (
                 <>
                   <button
@@ -177,54 +230,83 @@ const BuilderPage = () => {
                       const blob = new Blob([generatedHTML], { type: 'text/html' })
                       window.open(URL.createObjectURL(blob), '_blank')
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-zinc-400 hover:text-white text-xs border border-zinc-700 hover:border-zinc-600 rounded-lg transition-colors"
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '6px 12px', borderRadius: '8px',
+                      background: 'transparent', color: '#a1a1aa',
+                      border: '1px solid rgba(63,63,70,0.8)', fontSize: '12px', cursor: 'pointer',
+                    }}
                   >
-                    <ExternalLink size={13} />
-                    Open
+                    <ExternalLink size={12} /> Open
                   </button>
                   <button
                     onClick={handleDownload}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs rounded-lg transition-colors"
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '6px 12px', borderRadius: '8px',
+                      background: '#7c3aed', color: '#fff',
+                      border: 'none', fontSize: '12px', cursor: 'pointer',
+                    }}
                   >
-                    <Download size={13} />
-                    Download
+                    <Download size={12} /> Download
                   </button>
                 </>
               )}
-              <span className="text-zinc-600 text-xs">Live Preview</span>
+              <span style={{ color: '#3f3f46', fontSize: '11px' }}>Live Preview</span>
             </div>
           </div>
 
-          {/* Preview Area */}
-          <div className="flex-1 bg-zinc-950 overflow-hidden flex items-start justify-center p-4">
+          {/* Preview */}
+          <div style={{
+            flex: 1, background: '#09090b', overflow: 'hidden',
+            display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '16px',
+          }}>
             {generatedHTML ? (
-              <div
-                className="h-full bg-white rounded-lg overflow-hidden shadow-2xl transition-all duration-300"
-                style={{ width: deviceWidths[device] }}
-              >
+              <div style={{
+                height: '100%', background: '#fff',
+                borderRadius: '12px', overflow: 'hidden',
+                boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                width: deviceWidths[device],
+                transition: 'width 0.3s ease',
+              }}>
                 <iframe
                   srcDoc={generatedHTML}
                   sandbox="allow-scripts allow-same-origin"
-                  className="w-full h-full border-none"
-                  title="Generated Website Preview"
+                  style={{ width: '100%', height: '100%', border: 'none' }}
+                  title="Preview"
                 />
               </div>
             ) : (
-              <div className="flex-1 w-full h-full flex flex-col items-center justify-center text-center">
+              <div style={{ flex: 1, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
                 {isLoading ? (
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-3 border-purple-600/30 border-t-purple-600 rounded-full animate-spin" />
-                    <p className="text-zinc-400 text-sm">AI is crafting your website...</p>
-                    <p className="text-zinc-600 text-xs">This usually takes 5-10 seconds</p>
-                  </div>
+                  <>
+                    <div style={{
+                      width: '44px', height: '44px',
+                      border: '2px solid rgba(124,58,237,0.2)',
+                      borderTopColor: '#7c3aed',
+                      borderRadius: '50%',
+                      animation: 'spin 0.8s linear infinite',
+                      marginBottom: '16px',
+                    }} />
+                    <p style={{ color: '#a1a1aa', fontSize: '14px' }}>AI is crafting your website...</p>
+                    <p style={{ color: '#52525b', fontSize: '12px', marginTop: '4px' }}>This usually takes 5–10 seconds</p>
+                  </>
                 ) : (
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center">
-                      <Monitor size={28} className="text-zinc-600" />
+                  <>
+                    <div style={{
+                      width: '56px', height: '56px',
+                      background: 'rgba(39,39,42,0.6)',
+                      border: '1px solid rgba(63,63,70,0.6)',
+                      borderRadius: '16px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      marginBottom: '16px',
+                    }}>
+                      <Monitor size={24} style={{ color: '#52525b' }} />
                     </div>
-                    <p className="text-zinc-400 font-medium">Your website preview will appear here</p>
-                    <p className="text-zinc-600 text-sm">Describe your website and click Generate</p>
-                  </div>
+                    <p style={{ color: '#71717a', fontSize: '14px', fontWeight: 500 }}>Your website preview will appear here</p>
+                    <p style={{ color: '#3f3f46', fontSize: '12px', marginTop: '4px' }}>Describe your website and click Generate</p>
+                  </>
                 )}
               </div>
             )}

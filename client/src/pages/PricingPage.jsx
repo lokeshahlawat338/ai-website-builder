@@ -4,7 +4,7 @@ import { useAuth } from '@clerk/clerk-react'
 import { useApp } from '../context/AppContext'
 import Navbar from '../components/Navbar'
 import toast from 'react-hot-toast'
-import { Zap, Check } from 'lucide-react'
+import { Zap, Check, ArrowRight } from 'lucide-react'
 import api from '../lib/api'
 
 const PLANS = [
@@ -13,51 +13,27 @@ const PLANS = [
     name: 'Starter',
     price: '$4.99',
     credits: 10,
-    description: 'Perfect for trying out the platform',
-    features: [
-      '10 AI website generations',
-      'Live preview',
-      'Download HTML',
-      'Chat-style refinement',
-      'Email support'
-    ],
+    description: 'Perfect for trying out',
+    features: ['10 AI generations', 'Live preview', 'Download HTML', 'Chat refinement', 'Email support'],
     popular: false,
-    color: 'border-zinc-700'
   },
   {
     id: 'popular',
     name: 'Popular',
     price: '$14.99',
     credits: 50,
-    description: 'Best value for regular builders',
-    features: [
-      '50 AI website generations',
-      'Live preview',
-      'Download HTML',
-      'Chat-style refinement',
-      'Priority support',
-      'All website types'
-    ],
+    description: 'Best value for builders',
+    features: ['50 AI generations', 'Live preview', 'Download HTML', 'Chat refinement', 'Priority support', 'All website types'],
     popular: true,
-    color: 'border-purple-600'
   },
   {
     id: 'pro',
     name: 'Pro',
     price: '$34.99',
     credits: 150,
-    description: 'For power users and agencies',
-    features: [
-      '150 AI website generations',
-      'Live preview',
-      'Download HTML',
-      'Chat-style refinement',
-      'Priority support',
-      'All website types',
-      'Commercial license'
-    ],
+    description: 'For power users & agencies',
+    features: ['150 AI generations', 'Live preview', 'Download HTML', 'Chat refinement', 'Priority support', 'All types', 'Commercial license'],
     popular: false,
-    color: 'border-zinc-700'
   }
 ]
 
@@ -68,11 +44,7 @@ const PricingPage = () => {
   const [loadingPlan, setLoadingPlan] = useState(null)
 
   const handlePurchase = async (planId) => {
-    if (!isSignedIn) {
-      navigate('/sign-up')
-      return
-    }
-
+    if (!isSignedIn) { navigate('/sign-up'); return }
     setLoadingPlan(planId)
     try {
       await getAuthToken()
@@ -86,79 +58,125 @@ const PricingPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div style={{ minHeight: '100vh', background: '#09090b' }}>
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-6 pt-28 pb-20">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Simple, transparent pricing
-          </h1>
-          <p className="text-zinc-400 text-lg">
-            Start free with 5 credits. No credit card required.
-          </p>
+      {/* Gradient */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        pointerEvents: 'none', zIndex: 0,
+        background: 'radial-gradient(ellipse at top center, rgba(124,58,237,0.08) 0%, transparent 60%)',
+      }} />
 
-          {/* Free tier callout */}
-          <div className="inline-flex items-center gap-2 mt-6 px-5 py-3 bg-purple-950 border border-purple-800 rounded-xl">
-            <Zap size={16} className="text-purple-400" fill="currentColor" />
-            <span className="text-purple-300 text-sm font-medium">
-              Every new account gets 5 free credits on signup
-            </span>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1100px', margin: '0 auto', padding: '120px 24px 80px' }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '72px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '6px 16px', borderRadius: '999px',
+            background: 'rgba(124,58,237,0.1)',
+            border: '1px solid rgba(124,58,237,0.2)',
+            color: '#c4b5fd', fontSize: '13px', fontWeight: 500,
+            marginBottom: '24px',
+          }}>
+            <Zap size={13} fill="currentColor" />
+            Flexible credit-based pricing
           </div>
+
+          <h1 style={{
+            fontSize: 'clamp(32px, 5vw, 56px)',
+            fontWeight: 800, letterSpacing: '-1px',
+            color: '#fff', marginBottom: '16px', lineHeight: 1.1,
+          }}>
+            Simple pricing for
+            <br />
+            <span style={{
+              background: 'linear-gradient(135deg, #c084fc, #a855f7)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>
+              AI Website Generation
+            </span>
+          </h1>
+
+          <p style={{ color: '#71717a', fontSize: '17px', maxWidth: '480px', margin: '0 auto' }}>
+            Start free and scale as you build more websites. Credits never expire.
+          </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Plans */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '80px' }}>
           {PLANS.map(plan => (
             <div
               key={plan.id}
-              className={`relative bg-zinc-900 border-2 ${plan.color} rounded-2xl p-6 flex flex-col`}
+              style={{
+                position: 'relative',
+                padding: '32px',
+                borderRadius: '24px',
+                background: plan.popular ? 'rgba(30,20,50,0.9)' : 'rgba(18,18,20,0.9)',
+                border: plan.popular ? '1px solid rgba(124,58,237,0.5)' : '1px solid rgba(255,255,255,0.06)',
+                boxShadow: plan.popular ? '0 0 60px rgba(124,58,237,0.15)' : 'none',
+                transform: plan.popular ? 'scale(1.03)' : 'scale(1)',
+                backdropFilter: 'blur(20px)',
+              }}
             >
-              {/* Popular badge */}
               {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <span className="px-4 py-1 bg-purple-600 text-white text-xs font-bold rounded-full">
-                    MOST POPULAR
-                  </span>
+                <div style={{
+                  position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)',
+                  padding: '4px 16px', borderRadius: '999px',
+                  background: '#7c3aed', color: '#fff',
+                  fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em',
+                  whiteSpace: 'nowrap',
+                }}>
+                  MOST POPULAR
                 </div>
               )}
 
-              {/* Plan header */}
-              <div className="mb-6">
-                <h3 className="text-white font-bold text-xl mb-1">{plan.name}</h3>
-                <p className="text-zinc-400 text-sm mb-4">{plan.description}</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  <span className="text-zinc-400 text-sm">one-time</span>
-                </div>
-                <div className="mt-2 flex items-center gap-1.5">
-                  <Zap size={14} className="text-purple-400" fill="currentColor" />
-                  <span className="text-purple-400 font-semibold">{plan.credits} credits</span>
-                </div>
+              <h3 style={{ color: '#fff', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>{plan.name}</h3>
+              <p style={{ color: '#71717a', fontSize: '13px', marginBottom: '24px' }}>{plan.description}</p>
+
+              <div style={{ marginBottom: '8px' }}>
+                <span style={{ fontSize: '48px', fontWeight: 800, color: '#fff', letterSpacing: '-1px' }}>{plan.price}</span>
+                <span style={{ color: '#52525b', fontSize: '14px', marginLeft: '6px' }}>one-time</span>
               </div>
 
-              {/* Features */}
-              <ul className="flex flex-col gap-3 mb-8 flex-1">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '28px' }}>
+                <Zap size={15} fill="currentColor" style={{ color: '#a855f7' }} />
+                <span style={{ color: '#a855f7', fontWeight: 600, fontSize: '15px' }}>{plan.credits} Credits</span>
+              </div>
+
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2.5">
-                    <div className="w-5 h-5 bg-purple-950 border border-purple-800 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Check size={11} className="text-purple-400" />
+                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{
+                      width: '20px', height: '20px', borderRadius: '50%',
+                      background: 'rgba(124,58,237,0.15)',
+                      border: '1px solid rgba(124,58,237,0.3)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      <Check size={11} style={{ color: '#a855f7' }} />
                     </div>
-                    <span className="text-zinc-300 text-sm">{feature}</span>
+                    <span style={{ color: '#d4d4d8', fontSize: '14px' }}>{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              {/* CTA Button */}
               <button
                 onClick={() => handlePurchase(plan.id)}
                 disabled={loadingPlan === plan.id}
-                className={`w-full py-3 font-semibold rounded-xl transition-all text-sm ${
-                  plan.popular
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                    : 'bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                style={{
+                  width: '100%', padding: '14px',
+                  borderRadius: '14px',
+                  background: plan.popular ? '#7c3aed' : 'rgba(39,39,42,0.8)',
+                  color: '#fff', border: plan.popular ? 'none' : '1px solid rgba(63,63,70,0.8)',
+                  fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                  opacity: loadingPlan === plan.id ? 0.6 : 1,
+                }}
+                onMouseEnter={e => { if (!loadingPlan) e.currentTarget.style.background = plan.popular ? '#6d28d9' : 'rgba(63,63,70,0.8)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = plan.popular ? '#7c3aed' : 'rgba(39,39,42,0.8)' }}
               >
                 {loadingPlan === plan.id ? 'Redirecting...' : `Get ${plan.credits} Credits`}
               </button>
@@ -167,35 +185,56 @@ const PricingPage = () => {
         </div>
 
         {/* FAQ */}
-        <div className="mt-20">
-          <h2 className="text-2xl font-bold text-white text-center mb-10">
-            Frequently asked questions
+        <div style={{ marginBottom: '64px' }}>
+          <h2 style={{ textAlign: 'center', fontSize: '28px', fontWeight: 700, color: '#fff', marginBottom: '40px' }}>
+            Frequently Asked Questions
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
             {[
-              {
-                q: "What is a credit?",
-                a: "One credit = one AI website generation or one refinement. Credits never expire."
-              },
-              {
-                q: "Can I download the generated websites?",
-                a: "Yes! Every generated website can be downloaded as a complete HTML file that you fully own."
-              },
-              {
-                q: "What payment methods do you accept?",
-                a: "We accept all major credit/debit cards and UPI through Stripe's secure payment system."
-              },
-              {
-                q: "Do credits expire?",
-                a: "No. Credits never expire. Use them at your own pace."
-              }
-            ].map((faq, i) => (
-              <div key={i} className="p-5 bg-zinc-900 border border-zinc-800 rounded-xl">
-                <h3 className="text-white font-semibold mb-2">{faq.q}</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">{faq.a}</p>
+              ['What is a credit?', 'One credit equals one AI website generation or one refinement. Use them anytime.'],
+              ['Can I download websites?', 'Yes! Every generated website can be downloaded as a complete HTML file that you fully own.'],
+              ['Do credits expire?', 'Never. Credits stay in your account until you use them.'],
+              ['What payment methods?', 'All major credit/debit cards accepted through Stripe\'s secure payment system.'],
+            ].map(([q, a], i) => (
+              <div key={i} style={{
+                padding: '24px',
+                background: 'rgba(18,18,20,0.8)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '16px',
+              }}>
+                <h3 style={{ color: '#fff', fontWeight: 600, fontSize: '15px', marginBottom: '8px' }}>{q}</h3>
+                <p style={{ color: '#71717a', fontSize: '13px', lineHeight: 1.6 }}>{a}</p>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Bottom CTA */}
+        <div style={{
+          textAlign: 'center', padding: '64px 40px',
+          borderRadius: '24px',
+          background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(168,85,247,0.05))',
+          border: '1px solid rgba(124,58,237,0.2)',
+        }}>
+          <h2 style={{ fontSize: '32px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>
+            Ready to build with AI?
+          </h2>
+          <p style={{ color: '#71717a', fontSize: '16px', marginBottom: '32px' }}>
+            Start generating beautiful websites today.
+          </p>
+          <button
+            onClick={() => navigate(isSignedIn ? '/builder' : '/sign-up')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '14px 32px', borderRadius: '12px',
+              background: '#7c3aed', color: '#fff',
+              border: 'none', fontSize: '15px', fontWeight: 600, cursor: 'pointer',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#6d28d9'}
+            onMouseLeave={e => e.currentTarget.style.background = '#7c3aed'}
+          >
+            Start Building Free <ArrowRight size={16} />
+          </button>
         </div>
       </div>
     </div>
