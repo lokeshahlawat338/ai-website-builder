@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@clerk/clerk-sdk-node": "^5.1.7",
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "@google/generative-ai": "^0.24.1",
     "@prisma/client": "6.19.3",
     "cors": "^2.8.5",
